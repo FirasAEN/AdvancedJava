@@ -100,4 +100,11 @@ public class LibrayStreamsTest {
 
 
     }
+
+    @Test
+    public void testIntStreams() {
+        IntToDoubleFunction func = n -> n * 2 ;
+        List<Double> nums = IntStream.range(0,9).limit(10).mapToDouble(func).boxed().collect(Collectors.toList());
+        System.out.println(nums);
+    }
 }

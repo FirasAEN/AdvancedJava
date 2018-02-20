@@ -3,17 +3,15 @@ package Streams;
 import Comparable_Comparator.Song;
 import Comparable_Comparator.SongComparator;
 import org.junit.Test;
-import sun.plugin2.gluegen.runtime.StructAccessor;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collector;
+import java.util.function.IntToDoubleFunction;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Firas on 5/21/2017.
@@ -68,5 +66,38 @@ public class LibrayStreamsTest {
 
        Song s2 =  songs.stream().max(Comparator.comparing(song -> song.getTitle().length())).get();
        assertEquals("Blue Jazz", s2.getTitle());
+    }
+
+    @Test
+    public void testNestedLoops() {
+        List<Song> albumA = Stream.of(new Song(2.65), new Song(5.63), new Song(4.2)).collect(Collectors.toList());
+        List<Song> albumB = Stream.of(new Song(1.5), new Song(0.6352), new Song(2.2)).collect(Collectors.toList());
+
+        List<List<Song>> albums = Stream.of(albumA, albumB).collect(Collectors.toList());
+
+        Set<Song> selected = new HashSet<>();
+
+        for(List<Song> album : albums){
+            for(Song song : album){
+                if(song.getDuration() > 2){
+                    selected.add(song);
+                }
+            }
+        }
+
+        albums.stream().forEach(album -> {
+            album.stream().filter(s->s.getDuration()>2).forEach(selected::add);
+        });
+
+
+        Set<Song> songs = albums.stream()
+                .map(album->album.get(0))
+                .filter(song -> song.getDuration()>2)
+                .collect(Collectors.toSet());
+        System.out.println(songs.toString());
+
+        List<Song> subSelection = albumA.stream().filter(s->s.getDuration()>2).peek(System.out::println).collect(Collectors.toList());
+
+
     }
 }

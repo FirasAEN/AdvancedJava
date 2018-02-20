@@ -11,7 +11,11 @@ public class Song implements Comparable<Song>{
     }
 
     public Song(String s) {
+
         title = s;
+    }
+    public Song(double duration) {
+        this.duration = duration;
     }
 
     public String getTitle() {
@@ -34,4 +38,13 @@ public class Song implements Comparable<Song>{
     public int compareTo(Song o) {
         return this.getTitle().compareTo(o.getTitle());
     }
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "title='" + title + '\'' +
+                ", duration=" + duration +
+                '}';
+    }
 }
+
